@@ -1,4 +1,6 @@
 
+using ECommerceAPI.Persistance;
+
 namespace ECommerceAPI.API
 {
     public class Program
@@ -10,7 +12,8 @@ namespace ECommerceAPI.API
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddPersistanceService(builder.Configuration); 
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
