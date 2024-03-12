@@ -1,4 +1,4 @@
-﻿using ECommerceAPI.API.TestNamesapce;
+﻿
 using ECommerceAPI.Application.Repositories.Products;
 using ECommerceAPI.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +10,6 @@ namespace ECommerceAPI.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        
+
     }
-} 
+}

@@ -18,7 +18,6 @@ public class WriteRepository<TEntity> : IWriteRepository<TEntity> where TEntity 
     public async Task<bool> AddAsync(TEntity entity)
     {
         EntityEntry<TEntity> entityEntry = await Table.AddAsync(entity);
-        await SaveAsync();
         return entityEntry.State == EntityState.Added;
     }
 
