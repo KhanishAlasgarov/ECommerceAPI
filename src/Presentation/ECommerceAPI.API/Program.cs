@@ -1,5 +1,6 @@
 
 using ECommerceAPI.Persistance;
+using Newtonsoft.Json;
 
 namespace ECommerceAPI.API
 {
@@ -11,8 +12,12 @@ namespace ECommerceAPI.API
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
-            builder.Services.AddPersistanceService(builder.Configuration); 
+            builder.Services.AddControllers().AddNewtonsoftJson(cfg =>
+            {
+                cfg.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+
+            });
+            builder.Services.AddPersistanceService(builder.Configuration);
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

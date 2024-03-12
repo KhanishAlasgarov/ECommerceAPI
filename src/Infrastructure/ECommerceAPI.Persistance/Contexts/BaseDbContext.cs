@@ -20,27 +20,24 @@ namespace ECommerceAPI.Persistance.Contexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<Customer> Customers { get; set; }
 
+        // Interceptor
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
         {
+            // ChangeTracker - It is a property that enables the capture of changes made or added data on                    entities.Allows us to capture and obtain tracked data
+
             IEnumerable<EntityEntry<BaseEntity<Guid>>> entries = ChangeTracker
                 .Entries<BaseEntity<Guid>>()
                 .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
 
             foreach (EntityEntry<BaseEntity<Guid>> entry in entries)
             {
-                switch (entry.State)
+                _ = entry.State switch
                 {
-                    case EntityState.Added:
-                        entry.Entity.CreatedDate = DateTime.UtcNow;
-                        break;
-
-                    case EntityState.Modified:
-                        entry.Entity.UpdatedDate = DateTime.UtcNow;
-                        break;
-                }
+                    EntityState.Added => entry.Entity.CreatedDate = DateTime.UtcNow,
+                    EntityState.Modified => entry.Entity.UpdatedDate = DateTime.UtcNow,
+                    _ => default
+                };
             }
-
-
 
             return await base.SaveChangesAsync(cancellationToken);
         }
