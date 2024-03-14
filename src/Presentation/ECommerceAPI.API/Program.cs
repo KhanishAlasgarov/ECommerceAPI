@@ -18,6 +18,13 @@ namespace ECommerceAPI.API
 
             });
             builder.Services.AddPersistanceService(builder.Configuration);
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddDefaultPolicy(policy =>
+                {
+                    policy.WithOrigins("Vue proyektinin unvani").AllowAnyHeader().AllowAnyMethod();
+                });
+            });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -30,7 +37,7 @@ namespace ECommerceAPI.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseCors();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
