@@ -1,5 +1,12 @@
 
+using ECommerceAPI.Application;
+using ECommerceAPI.Application.Filters;
+using ECommerceAPI.Application.Validators;
+using ECommerceAPI.Application.Validators.Products;
 using ECommerceAPI.Persistance;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 namespace ECommerceAPI.API
@@ -12,12 +19,18 @@ namespace ECommerceAPI.API
 
             // Add services to the container.
 
-            builder.Services.AddControllers().AddNewtonsoftJson(cfg =>
-            {
-                cfg.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            builder.Services.AddControllers(opt => opt.Filters.Add<ValidationFilter>())
+                .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
+                .AddNewtonsoftJson(cfg => cfg.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
 
+            builder.Services.AddFluentValidationAutoValidation(cfg =>
+            {
+                cfg.DisableDataAnnotationsValidation = true;
             });
+
             builder.Services.AddPersistanceService(builder.Configuration);
+            builder.Services.AddApplicationService();
+
             builder.Services.AddCors(opt =>
             {
                 opt.AddDefaultPolicy(policy =>
