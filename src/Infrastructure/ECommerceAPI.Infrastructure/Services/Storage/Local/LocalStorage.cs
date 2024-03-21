@@ -47,7 +47,7 @@ public class LocalStorage : Storage, ILocalStorage
         List<(string fileName, string path)> datas = new();
         foreach (IFormFile file in files)
         {
-            string fileNewName = FileRenameAsync(path, file.FileName, HasFile);
+            string fileNewName = FileRename(path, file.FileName, HasFile);
 
             await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
             datas.Add((fileNewName, $"{path}\\{fileNewName}"));

@@ -1,6 +1,7 @@
 ﻿using ECommerceAPI.Application.Abstractions.Storage;
 using ECommerceAPI.Domain.Enums;
 using ECommerceAPI.Infrastructure.Services.Storage;
+using ECommerceAPI.Infrastructure.Services.Storage.Azure;
 using ECommerceAPI.Infrastructure.Services.Storage.Local;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Client.Extensions.Msal;
@@ -31,7 +32,7 @@ public static class InfrastructureServiceRegistration
                 services.AddScoped<IStorage, LocalStorage>();
                 break;
             case StorageType.Azure:
-                //services.AddScoped<IStorage, LocalStorage>();
+                services.AddScoped<IStorage, AzureStorage>();
                 break;
 
             default:

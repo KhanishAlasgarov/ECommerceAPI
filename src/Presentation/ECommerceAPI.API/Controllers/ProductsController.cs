@@ -55,7 +55,7 @@ namespace ECommerceAPI.API.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Upload(IFormFile[] formFiles)
         {
-            var datas = await storageService.UploadAsync("resource/product_images", formFiles);
+            var datas = await storageService.UploadAsync("files", formFiles);
 
             List<ProductImageFile> productImageFiles = datas.Select(x => new ProductImageFile
             {

@@ -5,7 +5,7 @@ namespace ECommerceAPI.Infrastructure.Services.Storage;
 public class Storage
 {
     protected delegate bool HasFile(string pathOrContainerName, string fileName);
-    protected string FileRenameAsync(string pathOrContainerName, string fileName, HasFile hasFileMethod, bool first = true)
+    protected string FileRename(string pathOrContainerName, string fileName, HasFile hasFileMethod, bool first = true)
     {
         string extension = Path.GetExtension(fileName);
         string oldName = Path.GetFileNameWithoutExtension(fileName);
@@ -15,7 +15,7 @@ public class Storage
         string newFileName = $"{newName}-{index}{extension}";
 
 
-        while (hasFileMethod(pathOrContainerName, fileName))
+        while (hasFileMethod(pathOrContainerName, newFileName))
         {
             index++;
             newFileName = $"{newName}-{index}{extension}";

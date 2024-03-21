@@ -3,6 +3,7 @@ using ECommerceAPI.Application;
 using ECommerceAPI.Application.Filters;
 using ECommerceAPI.Application.Validators;
 using ECommerceAPI.Application.Validators.Products;
+using ECommerceAPI.Domain.Enums;
 using ECommerceAPI.Infrastructure;
 using ECommerceAPI.Infrastructure.Services.Storage.Local;
 using ECommerceAPI.Persistance;
@@ -32,7 +33,7 @@ namespace ECommerceAPI.API
                 cfg.DisableDataAnnotationsValidation = true;
             });
 
-            builder.Services.AddStorage<LocalStorage>();
+            builder.Services.AddStorage(StorageType.Azure);
 
             builder.Services.AddApplicationService()
                             .AddInfrastructureService()
