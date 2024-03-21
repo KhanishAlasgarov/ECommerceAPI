@@ -3,6 +3,8 @@ using ECommerceAPI.Application;
 using ECommerceAPI.Application.Filters;
 using ECommerceAPI.Application.Validators;
 using ECommerceAPI.Application.Validators.Products;
+using ECommerceAPI.Infrastructure;
+using ECommerceAPI.Infrastructure.Services.Storage.Local;
 using ECommerceAPI.Persistance;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -19,17 +21,23 @@ namespace ECommerceAPI.API
 
             // Add services to the container.
 
+
             builder.Services.AddControllers(opt => opt.Filters.Add<ValidationFilter>())
                 .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
                 .AddNewtonsoftJson(cfg => cfg.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
+
 
             builder.Services.AddFluentValidationAutoValidation(cfg =>
             {
                 cfg.DisableDataAnnotationsValidation = true;
             });
 
-            builder.Services.AddPersistanceService(builder.Configuration);
-            builder.Services.AddApplicationService();
+            builder.Services.AddStorage<LocalStorage>();
+
+            builder.Services.AddApplicationService()
+                            .AddInfrastructureService()
+                            .AddPersistanceService(builder.Configuration);
+
 
             builder.Services.AddCors(opt =>
             {
@@ -50,6 +58,7 @@ namespace ECommerceAPI.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseStaticFiles();
             app.UseCors();
             app.UseHttpsRedirection();
 

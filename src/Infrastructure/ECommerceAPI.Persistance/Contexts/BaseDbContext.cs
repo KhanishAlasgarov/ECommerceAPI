@@ -2,12 +2,8 @@
 using ECommerceAPI.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+using File = ECommerceAPI.Domain.Entities.File;
 namespace ECommerceAPI.Persistance.Contexts
 {
     public class BaseDbContext : DbContext
@@ -19,6 +15,15 @@ namespace ECommerceAPI.Persistance.Contexts
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<File> Files { get; set; }
+        public DbSet<ProductImageFile> ProductImageFiles { get; set; }
+        public DbSet<InvoiceFile> InvoiceFiles { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<File>().Ignore(x => x.UpdatedDate);
+            base.OnModelCreating(modelBuilder);
+        }
 
         // Interceptor
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
