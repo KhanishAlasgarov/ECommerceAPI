@@ -7,13 +7,15 @@ namespace ECommerceAPI.Application.Extensions;
 
 public static partial class Extension
 {
-    public static IPaginate ToPaginate(this
+    public static TResponse ToPaginate<TResponse>(this
         IQueryable<dynamic> query,
         PaginateRequest paginateRequest
         )
+        where TResponse : Paginate, new()
     {
 
-        var response = new Paginate(paginateRequest.Page, paginateRequest.Size, query.Count());
+        TResponse response = new TResponse();
+        response.SetValue(paginateRequest.Page, paginateRequest.Size, query.Count());
 
         if (paginateRequest.Page < 1)
         {

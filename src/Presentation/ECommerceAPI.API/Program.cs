@@ -1,8 +1,7 @@
 
 using ECommerceAPI.Application;
 using ECommerceAPI.Application.Filters;
-using ECommerceAPI.Application.Validators;
-using ECommerceAPI.Application.Validators.Products;
+ 
 using ECommerceAPI.Domain.Enums;
 using ECommerceAPI.Infrastructure;
 using ECommerceAPI.Infrastructure.Services.Storage.Local;

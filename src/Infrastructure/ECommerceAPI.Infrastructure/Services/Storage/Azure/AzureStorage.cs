@@ -18,7 +18,10 @@ public class AzureStorage : Storage, IAzureStorage
     {
         _blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         BlobClient blobClient = _blobContainerClient.GetBlobClient(fileName);
-        await blobClient.DeleteAsync();
+        if (HasFile(containerName, fileName))
+        {
+            await blobClient.DeleteAsync();
+        }
     }
 
     public List<string> GetFiles(string containerName)

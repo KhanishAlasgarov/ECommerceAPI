@@ -3,9 +3,9 @@ using System.Collections;
 
 namespace ECommerceAPI.Domain.Common.Paging;
 
-public class Paginate : IPaginate 
-{
-    public Paginate(int page, int size, int count)
+public class Paginate : IPaginate
+{ 
+    public void SetValue(int page, int size, int count)
     {
         Size = size;
         Count = count;
@@ -14,13 +14,13 @@ public class Paginate : IPaginate
         Page = page > Pages ? this.Pages : page;
     }
 
-    public int Page { get; }
+    public int Page { get; private set; }
 
-    public int Size { get; }
+    public int Size { get; private set; }
 
-    public int Count { get; }
+    public int Count { get; private set; }
 
-    public int Pages { get; }
+    public int Pages { get; private set; }
 
     public bool HasPrevious => this.Page > 1;
 

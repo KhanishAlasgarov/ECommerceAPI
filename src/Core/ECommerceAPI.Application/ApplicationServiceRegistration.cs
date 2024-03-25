@@ -16,7 +16,13 @@ namespace ECommerceAPI.Application
         public static IServiceCollection AddApplicationService(this IServiceCollection services)
         {
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-             
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddMediatR(con =>
+            {
+                con.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            });
+
             return services;
         }
     }
