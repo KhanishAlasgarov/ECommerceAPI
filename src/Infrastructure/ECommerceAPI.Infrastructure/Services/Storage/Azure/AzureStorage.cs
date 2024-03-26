@@ -3,10 +3,11 @@ using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using ECommerceAPI.Application.Abstractions.Storage.Azure;
+using ECommerceAPI.Application.Extensions;
 
 namespace ECommerceAPI.Infrastructure.Services.Storage.Azure;
 
-public class AzureStorage : Storage, IAzureStorage
+public class AzureStorage : IAzureStorage
 {
     readonly BlobServiceClient _blobServiceClient;
     BlobContainerClient _blobContainerClient;
@@ -45,7 +46,7 @@ public class AzureStorage : Storage, IAzureStorage
         List<(string fileName, string pathOrContainerName)> datas = new();
         foreach (IFormFile file in files)
         {
-            string fileNewName = FileRename(containerName, file.FileName, HasFile);
+            string fileNewName = file.FileRename(containerName, HasFile);
 
             BlobClient blobClient = _blobContainerClient.GetBlobClient(fileNewName);
             await blobClient.UploadAsync(file.OpenReadStream());

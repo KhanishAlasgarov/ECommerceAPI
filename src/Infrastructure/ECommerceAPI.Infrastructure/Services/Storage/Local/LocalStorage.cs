@@ -1,10 +1,11 @@
 ﻿using ECommerceAPI.Application.Abstractions.Storage.Local;
+using ECommerceAPI.Application.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace ECommerceAPI.Infrastructure.Services.Storage.Local;
 
-public class LocalStorage : Storage, ILocalStorage
+public class LocalStorage : ILocalStorage
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
     public LocalStorage(IWebHostEnvironment webHostEnvironment)
@@ -47,7 +48,7 @@ public class LocalStorage : Storage, ILocalStorage
         List<(string fileName, string path)> datas = new();
         foreach (IFormFile file in files)
         {
-            string fileNewName = FileRename(path, file.FileName, HasFile);
+            string fileNewName = file.FileRename(path, HasFile);
 
             await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
             datas.Add((fileNewName, $"{path}\\{fileNewName}"));

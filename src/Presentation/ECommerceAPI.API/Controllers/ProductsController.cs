@@ -1,7 +1,12 @@
 ﻿
 using ECommerceAPI.Application.Abstractions.Storage;
 using ECommerceAPI.Application.Features.Commands.Product.CreateProduct;
+using ECommerceAPI.Application.Features.Commands.Product.RemoveProductImage;
+using ECommerceAPI.Application.Features.Commands.Product.UploadProductImage;
 using ECommerceAPI.Application.Features.Queries.Product.GetAllProduct;
+using ECommerceAPI.Application.Features.Queries.Product.GetProductById;
+using ECommerceAPI.Application.Features.Queries.Product.GetProductByName;
+using ECommerceAPI.Application.Features.Queries.Product.GetProductImages;
 using ECommerceAPI.Application.Repositories.Customers;
 using ECommerceAPI.Application.Repositories.Orders;
 using ECommerceAPI.Application.Repositories.ProductImageFiles;
@@ -16,28 +21,8 @@ namespace ECommerceAPI.API.Controllers;
 
 public class ProductsController : BaseController
 {
-    public ProductsController(ICustomerWriteRepository customerWriteRepository, IOrderWriteRepository orderWriteRepository, ICustomerReadRepository customerReadRepository, IOrderReadRepository orderReadRepository, IProductReadRepository productReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IStorageService storageService, IProductImageFileReadRepository productImageFileReadRepository)
-    {
-        _customerWriteRepository = customerWriteRepository;
-        _orderWriteRepository = orderWriteRepository;
-        _customerReadRepository = customerReadRepository;
-        _orderReadRepository = orderReadRepository;
-        _productReadRepository = productReadRepository;
-        _productImageFileWriteRepository = productImageFileWriteRepository;
-        this.storageService = storageService;
-        _productImageFileReadRepository = productImageFileReadRepository;
-    }
     // Scoped oldugu ucun context herbirine eyni context gonderilicey
-    private ICustomerWriteRepository _customerWriteRepository { get; }
-    private ICustomerReadRepository _customerReadRepository { get; }
-    private IOrderReadRepository _orderReadRepository { get; }
-    private IOrderWriteRepository _orderWriteRepository { get; }
 
-    private IProductReadRepository _productReadRepository { get; }
-    private IStorageService storageService { get; }
-
-    IProductImageFileWriteRepository _productImageFileWriteRepository { get; }
-    IProductImageFileReadRepository _productImageFileReadRepository { get; }
 
     [HttpPost]
     public async Task<IActionResult> Add(CreateProductCommandRequest request)
@@ -56,57 +41,36 @@ public class ProductsController : BaseController
     [HttpPost("[action]")]
     public async Task<IActionResult> Upload(IFormFile[] formFiles, Guid productId)
     {
-        if (Guid.Empty == productId)
-            return NotFound();
-
-
-        var datas = await storageService.UploadAsync("files", formFiles);
-        var product = await _productReadRepository.GetSignleAsync(x => x.Id == productId);
-
-        if (product == null)
-            return NotFound();
-
-
-
-        List<ProductImageFile> productImageFiles = datas.Select(x => new ProductImageFile
-        {
-            Path = x.pathOrContainerName,
-            FileName = x.fileName,
-            Storage = storageService.StorageName,
-            Products = new List<Product>() { product }
-
-        }).ToList();
-
-        await _productImageFileWriteRepository.AddRangeAsync(productImageFiles);
-        await _productImageFileWriteRepository.SaveAsync();
+        await Mediator.Send(new UploadProductImageCommandRequest(formFiles, productId));
         return Ok();
     }
-    [HttpGet]
+    [HttpGet("[action]")]
     public async Task<IActionResult> GetProductImages(Guid id)
     {
-        var products = _productReadRepository.GetAll().Include(x => x.ProductImageFiles);
+        var data = await Mediator.Send(new GetProductImagesQueryRequest
+        {
+            Id = id
+        });
 
-        var product = await products.FirstOrDefaultAsync(x => x.Id == id);
-
-        return Ok();
+        return Ok(data);
     }
 
     [HttpGet("[action]")]
+    public async Task<IActionResult> GetById(GetProductByIdQueryRequest request)
+    {
+        return Ok(await Mediator.Send(request));
+    }
+    [HttpGet("[action]")]
     public async Task<IActionResult> GetByName(string name)
     {
-        return Ok(await _productReadRepository.GetSignleAsync(x => x.Name == name));
+        var data = await Mediator.Send(new GetProductByNameQueryRequest(name));
+        return Ok(data);
     }
 
     [HttpDelete]
     public async Task<IActionResult> DeleteImage(Guid imageId)
     {
-        var image = await _productImageFileReadRepository.GetByIdAsync(imageId);
-        if (image == null)
-            return NotFound();
-        _productImageFileWriteRepository?.Remove(image);
-
-        await storageService.DeleteAsync(image.Path, image.FileName);
-        await _customerWriteRepository.SaveAsync();
+        await Mediator.Send(new RemoveProductImageCommandRequest(imageId));
 
         return Ok();
     }

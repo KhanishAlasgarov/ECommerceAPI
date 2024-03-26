@@ -16,9 +16,12 @@ public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity<Guid>
     protected BaseDbContext _context { get; }
     public DbSet<T> Table => _context.Set<T>();
 
-    public IQueryable<T> GetAll(bool enableTracking = true)
+    public IQueryable<T> GetAll(Func<IQueryable<T>, IQueryable<T>> include=null, bool enableTracking = true)
     {
         IQueryable<T> query = Table.AsQueryable();
+
+        if (include != null)
+            query = include(query);
 
         if (!enableTracking)
             query = query.AsNoTracking();

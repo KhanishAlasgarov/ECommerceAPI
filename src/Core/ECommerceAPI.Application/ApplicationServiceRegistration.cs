@@ -1,6 +1,9 @@
-﻿using ECommerceAPI.Domain.Entities;
+﻿using AutoMapper;
+using ECommerceAPI.Application.Profiles;
+using ECommerceAPI.Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -22,6 +25,11 @@ namespace ECommerceAPI.Application
             {
                 con.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             });
+
+            services.AddSingleton(provider => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new ProductMappingProfile(provider.GetService<IConfiguration>()!));
+            }).CreateMapper());
 
             return services;
         }
