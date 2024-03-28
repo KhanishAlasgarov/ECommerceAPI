@@ -1,20 +1,11 @@
-﻿
-using ECommerceAPI.Application.Abstractions.Storage;
-using ECommerceAPI.Application.Features.Commands.Product.CreateProduct;
+﻿using ECommerceAPI.Application.Features.Commands.Product.CreateProduct;
 using ECommerceAPI.Application.Features.Commands.Product.RemoveProductImage;
 using ECommerceAPI.Application.Features.Commands.Product.UploadProductImage;
 using ECommerceAPI.Application.Features.Queries.Product.GetAllProduct;
 using ECommerceAPI.Application.Features.Queries.Product.GetProductById;
 using ECommerceAPI.Application.Features.Queries.Product.GetProductByName;
 using ECommerceAPI.Application.Features.Queries.Product.GetProductImages;
-using ECommerceAPI.Application.Repositories.Customers;
-using ECommerceAPI.Application.Repositories.Orders;
-using ECommerceAPI.Application.Repositories.ProductImageFiles;
-using ECommerceAPI.Application.Repositories.Products;
-
-using ECommerceAPI.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceAPI.API.Controllers;
 

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using ECommerceAPI.Application.Features.Commands.Product.CreateProduct;
+using ECommerceAPI.Application.Features.Commands.User.UserRegister;
 using ECommerceAPI.Application.Features.Queries.Product.GetProductById;
 using ECommerceAPI.Application.Features.Queries.Product.GetProductByName;
 using ECommerceAPI.Application.Features.Queries.Product.GetProductImages;
+using ECommerceAPI.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +17,7 @@ public class ProductMappingProfile : Profile
     public ProductMappingProfile(IConfiguration configuration)
     {
         _configuration = configuration;
+        CreateMap<UserRegisterCommandRequest, AppUser>().ReverseMap();
         CreateMap<P::Product, CreateProductCommandRequest>().ReverseMap();
         CreateMap<P::Product, GetProductByIdQueryResponse>().ReverseMap();
         CreateMap<P::Product, GetProductByNameQueryResponse>().ReverseMap();

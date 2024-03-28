@@ -1,12 +1,14 @@
 ﻿using ECommerceAPI.Domain.Entities;
 using ECommerceAPI.Domain.Entities.Common;
+using ECommerceAPI.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 using File = ECommerceAPI.Domain.Entities.File;
 namespace ECommerceAPI.Persistance.Contexts
 {
-    public class BaseDbContext : DbContext
+    public class BaseDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         public BaseDbContext(DbContextOptions options) : base(options)
         {

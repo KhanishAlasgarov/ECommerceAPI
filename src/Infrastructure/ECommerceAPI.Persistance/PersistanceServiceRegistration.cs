@@ -4,6 +4,7 @@ using ECommerceAPI.Application.Repositories.InvoiceFiles;
 using ECommerceAPI.Application.Repositories.Orders;
 using ECommerceAPI.Application.Repositories.ProductImageFiles;
 using ECommerceAPI.Application.Repositories.Products;
+using ECommerceAPI.Domain.Entities.Identity;
 using ECommerceAPI.Persistance.Contexts;
 using ECommerceAPI.Persistance.Repositories.Customers;
 using ECommerceAPI.Persistance.Repositories.Files;
@@ -38,12 +39,25 @@ namespace ECommerceAPI.Persistance
 
             services.AddScoped<IFileReadRepository, FileReadRepository>();
             services.AddScoped<IFileWriteRepository, FileWriteRepository>();
-            
+
             services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
             services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
-            
+
             services.AddScoped<IProductImageFileReadRepository, ProductImageFileReadRepository>();
             services.AddScoped<IProductImageFileWriteRepository, ProductImageFileWriteRepository>();
+
+
+            services.AddIdentity<AppUser, AppRole>((opt) =>
+            {
+                opt.Password.RequireDigit = true;
+                opt.Password.RequiredLength = 8;
+                opt.Password.RequireLowercase = true;
+                opt.Password.RequireUppercase = true;
+                opt.Password.RequireNonAlphanumeric = true;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+                opt.Lockout.MaxFailedAccessAttempts = 3;
+                //opt.SignIn.RequireConfirmedEmail= true;
+            }).AddEntityFrameworkStores<BaseDbContext>();
 
 
             return services;
