@@ -1,7 +1,7 @@
 
 using ECommerceAPI.Application;
 using ECommerceAPI.Application.Filters;
- 
+
 using ECommerceAPI.Domain.Enums;
 using ECommerceAPI.Infrastructure;
 using ECommerceAPI.Infrastructure.Services.Storage.Local;
@@ -62,6 +62,7 @@ namespace ECommerceAPI.API
             app.UseCors();
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
