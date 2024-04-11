@@ -5,11 +5,11 @@ using ECommerceAPI.Application.Features.Queries.Product.GetAllProduct;
 using ECommerceAPI.Application.Features.Queries.Product.GetProductById;
 using ECommerceAPI.Application.Features.Queries.Product.GetProductByName;
 using ECommerceAPI.Application.Features.Queries.Product.GetProductImages;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceAPI.API.Controllers;
-
-
+ 
 public class ProductsController : BaseController
 {
     // Scoped oldugu ucun context herbirine eyni context gonderilicey

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using ECommerceAPI.Application.Abstractions.Token;
 using ECommerceAPI.Application.Profiles;
 using ECommerceAPI.Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,8 @@ namespace ECommerceAPI.Application
         {
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+             
 
             services.AddMediatR(con =>
             {
