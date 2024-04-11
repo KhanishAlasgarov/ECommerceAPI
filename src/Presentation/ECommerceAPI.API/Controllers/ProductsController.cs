@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceAPI.API.Controllers;
- 
+
+
 public class ProductsController : BaseController
 {
     // Scoped oldugu ucun context herbirine eyni context gonderilicey
@@ -21,7 +22,7 @@ public class ProductsController : BaseController
         await Mediator.Send(request);
         return Ok();
     }
-
+    [Authorize(Roles = "Member")]
     [HttpGet("[action]")]
     public async Task<IActionResult> GetAll([FromQuery] GetAllProductQueryRequest request)
     {

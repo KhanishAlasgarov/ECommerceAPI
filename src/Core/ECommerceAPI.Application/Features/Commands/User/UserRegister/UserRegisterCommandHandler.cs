@@ -19,13 +19,16 @@ public class UserRegisterCommandHandler : IRequestHandler<UserRegisterCommandReq
 
     public async Task<UserRegisterCommandResponse> Handle(UserRegisterCommandRequest request, CancellationToken cancellationToken)
     {
-        var identityResult = await _userManager.CreateAsync(_mapper.Map<AppUser>(request), request.Password);
+        var user = _mapper.Map<AppUser>(request);
+        var identityResult = await _userManager.CreateAsync(user, request.Password);
 
         if (identityResult.Succeeded)
+        {
+
+            await _userManager.AddToRoleAsync(user, "Member");
             return new UserRegisterCommandResponse("The user has registered successfully."); //todo refactor here
+        }
 
-
-        throw new UserRegisterFailedException("We encountered an unexpected error while creating the user."); //todo return errorss
+        throw new UserRegisterFailedException(string.Join(", ", identityResult.Errors.Select(x => x.Description))); //todo return errorss
     }
 }
-         
